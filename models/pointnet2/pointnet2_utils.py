@@ -49,6 +49,7 @@ def index_points(points, idx):
     Return:
         new_points:, indexed points data, [B, S, C]
     """
+    points = points.permute(0, 2, 1)
     device = points.device
     B = points.shape[0]
     view_shape = list(idx.shape)
