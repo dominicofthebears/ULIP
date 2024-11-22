@@ -22,9 +22,12 @@ if __name__ == '__main__':
         name = "open_clip_model." + k
         new_state_dict[name] = v
     model.load_state_dict(new_state_dict)
-    #with open("models/coords_list.pkl", "rb") as f:
-       #loaded_list = pickle.load(f)
+    colors = np.load("models/points_colors.npy")
     points_array = np.asarray(o3d.io.read_point_cloud("models/scene_example.ply").points)
+    print(points_array.shape)
+    print(colors.shape)
+    points_array = np.concatenate((points_array, colors), axis=1)
+    print(points_array.shape)
     points_array = points_array[np.newaxis, ...]
-    points_array = torch.from_numpy(points_array).to(device = "cuda", dtype=torch.float)
+    points_array = torch.from_numpy(points_array).to(device = "cpu", dtype=torch.float)
     print(model.encode_pc(points_array))
